@@ -1,4 +1,3 @@
-import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, Button, TextInput } from "react-native";
 import { useState } from "react";
 
@@ -10,14 +9,11 @@ export default function App() {
 		setEnteredGoalText(enteredText);
 	}
 
-	// /**
-	//  * Bad Programming Practice
-	//  */
-	// function addGoalHandler() {
-	// 	setCourseGoals([...courseGoals, enteredGoalText]);
-	// }
-
 	function addGoalHandler() {
+		// Checks if input text is empty
+		if (!enteredGoalText) return;
+
+		// Adds the goal to the list
 		setCourseGoals((currentCourseGoals) => [
 			...currentCourseGoals,
 			enteredGoalText,
@@ -29,7 +25,10 @@ export default function App() {
 
 	return (
 		<View style={styles.appContainer}>
-			<Text style={styles.header}>Goal Tracker</Text>
+			<Text style={styles.header}>Course Goals</Text>
+			<Text style={styles.bodyText}>
+				This will serve as your tracker for your course goals!
+			</Text>
 			<View style={styles.inputContainer}>
 				<TextInput
 					placeholder="Your Course Goal"
@@ -43,12 +42,13 @@ export default function App() {
 					color={colors.accent}
 				/>
 			</View>
+			<Text style={styles.header}>List of Goals</Text>
 			<View style={styles.goalsContainer}>
-				<Text style={styles.header}>List of Goals</Text>
-				{courseGoals.map((goal) => (
-					<Text key={goal} style={styles.goalItem}>
-						{goal}
-					</Text>
+				{courseGoals.map((goal, index) => (
+					<View key={index} style={styles.goalItemContainer}>
+						<Text style={styles.goalItemHeader}>Goal {index + 1}:</Text>
+						<Text style={styles.goalItemText}>{goal}</Text>
+					</View>
 				))}
 				<Text style={styles.endOfList}>End of list.</Text>
 			</View>
@@ -64,17 +64,20 @@ const colors = {
 
 const styles = StyleSheet.create({
 	header: {
-		textAlign: "center",
 		fontSize: 36,
 		fontWeight: "bold",
 		color: colors.accent,
 		marginTop: 4,
+	},
+	bodyText: {
+		color: colors.accent,
 	},
 	appContainer: {
 		flex: 1,
 		paddingTop: 50,
 		paddingHorizontal: 16,
 		backgroundColor: colors.primary,
+		maxHeight: "100vh",
 	},
 	inputContainer: {
 		flex: 1,
@@ -92,16 +95,23 @@ const styles = StyleSheet.create({
 		width: "70%",
 		marginRight: 8,
 		padding: 13,
+		borderRadius: 10,
 	},
 	goalsContainer: {
 		flex: 5,
+		marginVertical: 16,
 		flexDirection: "column",
+		borderWidth: 2,
+		borderRadius: 10,
+		borderColor: colors.accent,
+		overflow: "scroll",
 	},
-	goalItem: {
-		marginVertical: 4,
+	goalItemContainer: {
+		margin: 4,
 		paddingVertical: 24,
 		paddingHorizontal: 16,
 		borderWidth: 2,
+		borderRadius: 10,
 		borderColor: colors.accent,
 		shadowColor: colors.accent,
 		backgroundColor: colors.secondary,
@@ -109,8 +119,19 @@ const styles = StyleSheet.create({
 		fontSize: 18,
 		fontWeight: "bold",
 	},
+	goalItemHeader: {
+		color: colors.primary,
+		fontSize: 20,
+		fontWeight: "bold",
+		marginBottom: 4,
+	},
+	goalItemText: {
+		color: colors.primary,
+		fontSize: 18,
+	},
 	endOfList: {
 		color: "#aaaaaa",
 		textAlign: "center",
+		marginVertical: 8,
 	},
 });

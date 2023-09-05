@@ -1,5 +1,13 @@
-import { StyleSheet, Text, View, Button, TextInput } from "react-native";
+import {
+	StyleSheet,
+	Text,
+	View,
+	Button,
+	TextInput,
+	FlatList,
+} from "react-native";
 import { useState } from "react";
+import { ScrollView } from "react-native-web";
 
 export default function App() {
 	const [enteredGoalText, setEnteredGoalText] = useState("");
@@ -44,13 +52,22 @@ export default function App() {
 			</View>
 			<Text style={styles.header}>List of Goals</Text>
 			<View style={styles.goalsContainer}>
-				{courseGoals.map((goal, index) => (
-					<View key={index} style={styles.goalItemContainer}>
-						<Text style={styles.goalItemHeader}>Goal {index + 1}:</Text>
-						<Text style={styles.goalItemText}>{goal}</Text>
-					</View>
-				))}
-				<Text style={styles.endOfList}>End of list.</Text>
+				<ScrollView>
+					<FlatList
+						data={courseGoals}
+						renderItem={(itemData) => {
+							return (
+								<View key={itemData.index} style={styles.goalItemContainer}>
+									<Text style={styles.goalItemHeader}>
+										Goal {itemData.index + 1}:
+									</Text>
+									<Text style={styles.goalItemText}>{itemData.item}</Text>
+								</View>
+							);
+						}}
+					/>
+					<Text style={styles.endOfList}>End of list.</Text>
+				</ScrollView>
 			</View>
 		</View>
 	);
@@ -104,7 +121,6 @@ const styles = StyleSheet.create({
 		borderWidth: 2,
 		borderRadius: 10,
 		borderColor: colors.accent,
-		overflow: "scroll",
 	},
 	goalItemContainer: {
 		margin: 4,
